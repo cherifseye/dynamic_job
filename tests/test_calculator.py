@@ -28,3 +28,8 @@ def test_mul(calculator):
 def test_mul_with_zero(calculator):
     result = calculator.mul(5, 0)
     assert result == 0
+
+def teste_add_and_mul(calculator):
+    op1 = calculator.mul(2, 4)
+    result = calculator.add(2, op1)
+    assert result == 10
