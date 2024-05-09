@@ -27,4 +27,6 @@ jobs:
         id: run_test
         run: |
           pytest
-          echo "::set-output name=test_result::${PWD}/test_result.json"
+      - name: Save Output
+        run: |
+            echo "name=test_result::${PWD}/test_result.json" >> $GITHUB_OUTPUT
