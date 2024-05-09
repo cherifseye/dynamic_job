@@ -1,8 +1,8 @@
-name: "dynamic jobs test"
+name: dynamic jobs test
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   run_test:
@@ -16,7 +16,7 @@ jobs:
       - name: set up python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: 3.12
       
       - name: Install dependencies
         run: |
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        job_1_result: [ ${{fromJson(needs.run_test.outputs.test_result)}} ]
+        job_1_result: ${{fromJson(needs.run_test.outputs.test_result)}}
     steps:
       - name: Generate Matrix
         run: |
