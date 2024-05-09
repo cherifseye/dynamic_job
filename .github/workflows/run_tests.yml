@@ -10,7 +10,7 @@ jobs:
             os: [ubuntu]
             os_version: [22.04, 24.04]
             python-version: [3.12]
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-${{ matrix.os_version }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     
