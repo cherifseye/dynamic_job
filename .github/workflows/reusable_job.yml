@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        job_1_result: ${{fromJson(needs.run_test.outputs.test_result)}}
+        job_1_result: ${{fromJson(needs.run_test.outputs.test_result).result}}
     steps:
       - name: Generate Matrix
         run: |
