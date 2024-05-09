@@ -16,7 +16,7 @@ jobs:
       - name: set up python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12
+          python-version: 3.10
       
       - name: Install dependencies
         run: |
@@ -28,6 +28,13 @@ jobs:
         run: |
           pytest
           echo "::set-output name=test_result::${PWD}/test_result.json"
+
+      - name: Upload test result as artifact
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-result
+          path: ${{ steps.run_test.outputs.test_result }}
 
   generate_matrix:
     needs: run_test
