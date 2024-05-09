@@ -5,7 +5,12 @@ on:
 
 jobs:
   run_test:
-    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+            os: [ubuntu-latest, windows-latest]
+            os_version: [12, 14]
+            python-version: [3.7, 3.8, 3.9]
+    runs-on: ${{ matrix.os }}-${{ matrix.os_version }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     
@@ -16,7 +21,7 @@ jobs:
       - name: set up python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12
+          python-version: ${{ matrix.python-version}}
       
       - name: Install dependencies
         run: |
