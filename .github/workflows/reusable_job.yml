@@ -29,4 +29,4 @@ jobs:
           pytest
       - name: Save Output
         run: |
-            echo "name=test_result/test_result.json" >> $GITHUB_OUTPUT
+          echo "$GITHUB_WORKSPACE/test_result.json" >> $GITHUB_OUTPUT
