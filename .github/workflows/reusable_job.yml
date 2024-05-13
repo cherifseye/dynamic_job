@@ -25,10 +25,10 @@ jobs:
       - name: Generate test batches
         id: set-test-batches
         run: |
-          python batches.py
-        # Capture the output and format it as JSON
-        env:
-          TEST_BATCHES: ${{ steps.set-test-batches.outputs.stdout }}
+          # Execute the script and capture its output
+          TEST_BATCHES=$(python batches.py | jq -c .)
+          # Set the output variable with formatted JSON
+          echo "::set-output name=test_batches::${TEST_BATCHES}"
           
   run-tests-parallel:
     needs: generate-test-batches
