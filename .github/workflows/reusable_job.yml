@@ -26,6 +26,10 @@ jobs:
       - name: Run test
         id: run_test
         run: |
-          pytest
+          pytest > test_output.txt  # Save test output to a file
+          
       - name: Save Output
-        run: echo "test_result=$?" >> $GITHUB_ENV
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-output
+          path: test_output.txt  # Path to the file to upload
