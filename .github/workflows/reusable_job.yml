@@ -29,7 +29,8 @@ jobs:
           TEST_BATCHES=$(python batches.py | jq -c .)
           # Set the output variable with formatted JSON
           echo "::set-output name=test_batches::${TEST_BATCHES}"
-          
+        shell: bash
+
   run-tests-parallel:
     needs: generate-test-batches
     runs-on: ubuntu-latest
