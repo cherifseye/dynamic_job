@@ -28,5 +28,4 @@ jobs:
         run: |
           pytest
       - name: Save Output
-        run: echo "test_result=hello" >> "$GITHUB_OUTPUT"
-        
+        run: echo "test_result=$?" >> $GITHUB_ENV
