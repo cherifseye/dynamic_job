@@ -1,53 +1,54 @@
-name: "dynamic jobs test"
+name: Parallel Test Execution
 
 on:
   push:
     branches: [main]
 
 jobs:
-  run_test:
+  generate-test-batches:
     runs-on: ubuntu-latest
     outputs:
-      test_result: ${{ steps.run_test.outputs.test_result }}
+      test_batches: ${{ steps.set-test-batches.outputs.test_batches }}
     steps:
-      - name: checkout
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: set up python
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.12
-      
+          python-version: 3.x
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install pytest
-      
-      - name: Run test
-        id: run_test
-        run: |
-          pytest > test_output.txt  # Save test output to a file
-          
-      - name: Save Output
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-output
-          path: test_output.txt  # Path to the file to upload
+          python -m pip install --upgrade-strategy eager -r requirements.txt
 
-  run_parallel_jobs:
-    needs: run_test  # Waits for the 'run_test' job to complete
+      - name: Generate test batches
+        id: set-test-batches
+        run: |
+          python batches.py
+        # Capture the output and format it as JSON
+        env:
+          TEST_BATCHES: ${{ steps.set-test-batches.outputs.stdout }}
+          
+  run-tests-parallel:
+    needs: generate-test-batches
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        parallel_job:
-          - job_name: Job 1
-            param: value1
-          - job_name: Job 2
-            param: value2
-          # Add more jobs as needed
+        test_batch: ${{fromJson(needs.generate-test-batches.outputs.test_batches)}}
     steps:
-      - name: checkout
-        uses: actions/checkout@v4
-      # Add steps specific to your parallel jobs here
-      - name: Run parallel job
-        run: echo "Running ${{ matrix.parallel_job.job_name }} with param ${{ matrix.parallel_job.param }}"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade-strategy eager -r requirements.txt
+
+      - name: Run tests in parallel
+        run: |
+          pytest "${{ matrix.test_batch }}"

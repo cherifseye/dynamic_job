@@ -1,0 +1,23 @@
+import pytest
+from src.calculator import dumy_calculator
+
+@pytest.fixture
+def calculator():
+    return dumy_calculator()
+
+def test_subs_negative_result(calculator):
+    result = calculator.subs(3, 5)
+    assert result == -2
+
+def test_mul(calculator):
+    result = calculator.mul(2, 3)
+    assert result == 6
+
+def test_mul_with_zero(calculator):
+    result = calculator.mul(5, 0)
+    assert result == 0
+
+def teste_add_and_mul(calculator):
+    op1 = calculator.mul(2, 4)
+    result = calculator.add(2, op1)
+    assert result == 10
