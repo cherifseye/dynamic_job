@@ -6,7 +6,7 @@ def generate_test_batches():
   if test_files:
     for i, test_file in enumerate(test_files):
       output_name = f"TEST_BATCH_{i+1}"
-      print(f"{output_name}::./{test_file}") 
+      print(f'{{"name": "{output_name}", "path": "./{test_file}"}}')
 
 if __name__ == "__main__":
   generate_test_batches()
