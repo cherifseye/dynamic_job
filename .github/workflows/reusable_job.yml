@@ -2,7 +2,7 @@ name: "dynamic jobs test"
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   run_test:
@@ -33,3 +33,21 @@ jobs:
         with:
           name: test-output
           path: test_output.txt  # Path to the file to upload
+
+  run_parallel_jobs:
+    needs: run_test  # Waits for the 'run_test' job to complete
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        parallel_job:
+          - job_name: Job 1
+            param: value1
+          - job_name: Job 2
+            param: value2
+          # Add more jobs as needed
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      # Add steps specific to your parallel jobs here
+      - name: Run parallel job
+        run: echo "Running ${{ matrix.parallel_job.job_name }} with param ${{ matrix.parallel_job.param }}"
