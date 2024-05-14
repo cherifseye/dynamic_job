@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       test_batches: ${{ steps.set-test-batches.outputs.test_batches }}
-    env:
-      GITHUB_ENV: ${{ github.workspace }}/.env
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -29,7 +27,7 @@ jobs:
         run: |
           # Execute the script and capture its output
           TEST_BATCHES=$(python batches.py | jq -c .)
-          echo "test_batches=$TEST_BATCHES" >> $GITHUB_ENV
+          echo "::set-output name=test_batches::${TEST_BATCHES}"
 
   run-tests-parallel:
     needs: generate-test-batches
@@ -53,4 +51,4 @@ jobs:
 
       - name: Run tests in parallel
         run: |
-          pytest $matrix.test_batch
+          pytest "${{ matrix.test_batch }}"
