@@ -25,9 +25,8 @@ jobs:
       - name: Generate test batches
         id: set-test-batches
         run: |
-          # Execute the script and capture its output
           TEST_BATCHES=$(python batches.py | jq -c .)
-          echo "::set-output name=test_batches::${TEST_BATCHES}"
+          echo "test_batches=$TEST_BATCHES" >> $GITHUB_OUTPUT
 
   run-tests-parallel:
     needs: generate-test-batches
