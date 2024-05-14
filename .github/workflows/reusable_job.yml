@@ -49,4 +49,4 @@ jobs:
 
       - name: Run tests in parallel
         run: |
-          pytest "${{ matrix.test_batch }}"
+          pytest "${{ matrix.test_batch.path }}"
