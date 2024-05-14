@@ -27,16 +27,14 @@ jobs:
         run: |
           # Execute the script and capture its output
           TEST_BATCHES=$(python batches.py | jq -c .)
-          # Set the output variable with formatted JSON
           echo "::set-output name=test_batches::${TEST_BATCHES}"
-        shell: bash
 
   run-tests-parallel:
     needs: generate-test-batches
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         test_batch: ${{fromJson(needs.generate-test-batches.outputs.test_batches)}}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
